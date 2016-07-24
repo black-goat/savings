@@ -31,7 +31,7 @@ def extract_savings(page_name):
 
 	dc = soup.find('span', class_ = 'ty-discount-label__value')
 	if dc == None:
-		return 0
+		return None
 	else:
 		name = soup.title.string
 		price = soup.find('span', class_ = 'ty-price-num').string
