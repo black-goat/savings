@@ -20,7 +20,18 @@ def extract_items(page_name):
 	soup = bs4.BeautifulSoup(page.text, 'lxml')
 	divs = soup.find_all('div', class_ = 'ty-grid-list__image')
 
-	return [d.find_next('a').get('href') for d in divs]
+	next_page = get_next_page(soup)
+
+	return [d.find_next('a').get('href') for d in divs], next_page
+
+def get_next_page(page_soup):
+	"""Gets next sales page. Returns url if such exists and None otherwise"""
+	nxt = page_soup.find('a', class_='ty-pagination__next', href=True)
+	if(nxt != None):
+		return nxt.get('href')
+	else:
+		return None
+
 
 def extract_savings(page_name):
 	"""Extracts name, price and savings % of product (if product is on sale)"""
@@ -29,7 +40,9 @@ def extract_savings(page_name):
 
 	soup = bs4.BeautifulSoup(page.text, 'lxml')
 
-	dc = soup.find('span', class_ = 'ty-discount-label__value')
+	dc = soup.find('div', class_='ty-product-block__img-wrapper')
+	dc = dc.find('span', class_='ty-discount-label__value')
+
 	if dc == None:
 		return None
 	else:
@@ -44,3 +57,7 @@ def get_percent_savings(savings_string):
 	for word in savings_string.split():
 		if word[0].isdigit():
 			return word
+
+#p = input()
+#s = extract_savings(p)
+#print('{} on sale for {} at -{} discount'.format(*s))
