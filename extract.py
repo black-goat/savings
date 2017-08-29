@@ -57,7 +57,3 @@ def get_percent_savings(savings_string):
 	for word in savings_string.split():
 		if word[0].isdigit():
 			return word
-
-#p = input()
-#s = extract_savings(p)
-#print('{} on sale for {} at -{} discount'.format(*s))
